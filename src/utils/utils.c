@@ -6,11 +6,11 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:26:23 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/16 09:27:11 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/17 16:27:38 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+ #include "../../include/philo.h"
 
 void ft_putstr_fd(char *str,int fd)
 {
@@ -24,6 +24,13 @@ void ft_putstr_fd(char *str,int fd)
 		write (fd, &str[i],1);
 		i++;
 	}
+}
+
+int	ft_isdigit(int c)
+{
+	if (c <= '9' && c >= '0')
+		return (1);
+	return (0);
 }
 
 int ft_atoi(char *str)
