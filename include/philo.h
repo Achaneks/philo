@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:34:04 by achanek           #+#    #+#             */
-/*   Updated: 2025/04/23 11:12:17 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/16 11:04:30 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <pthread.h>
 
 typedef struct s_philo
 {
@@ -25,6 +26,10 @@ typedef struct s_philo
 	int number_of_times_each_philosopher_must_eat;
 } t_philo;
 
+int		ft_check_is_numbers(char **str);
+void	ft_fill_struct(t_philo *philo_info, char **av, int ac);
+void	ft_putstr_fd(char *str,int fd);
+int		ft_atoi(char *str);
 
 
 # endif
