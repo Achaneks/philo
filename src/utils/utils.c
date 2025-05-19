@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:26:23 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/17 16:27:38 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/19 10:36:12 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,22 @@ void ft_putstr_fd(char *str,int fd)
 	}
 }
 
-int	ft_isdigit(int c)
-{
-	if (c <= '9' && c >= '0')
-		return (1);
-	return (0);
-}
-
 int ft_atoi(char *str)
 {
-	int n;
+	long n;
 	int signe;
 	int i;
 
 	i = 0;
 	n = 0;
 	signe = 1;
-	if(str[i] == '+' || str[i] == '-')
-	{
-		if(str[i] == '-')
-			signe = -1;
-		i++;
-	}
 	while (str[i])
 	{
 		n *= 10;
 		n += str[i] - '0';
 		i++;
 	}
+	if ((str[i] < '0' || str[i] > '9') || n > 2147483647)
+		return (0);
 	return (n * signe);
 }

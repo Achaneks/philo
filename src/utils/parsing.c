@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:33:53 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/17 18:07:14 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/19 10:39:34 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 
-void	ft_fill_struct(t_input *input, char **av, int ac)
+void	ft_fill_input(t_input *input, char **av, int ac)
 {
 	input->number_of_philosophers = ft_atoi(av[1]);
 	input->time_to_die = ft_atoi(av[2]);
