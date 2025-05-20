@@ -1,41 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_threads.c                                   :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 16:53:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/20 13:23:04 by achanek          ###   ########.fr       */
+/*   Created: 2025/05/20 13:24:28 by achanek           #+#    #+#             */
+/*   Updated: 2025/05/20 13:25:18 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philo.h"
 
-
-int create_threads(t_all_info *all_info)
-{
-	int i;
-
-	i = 0;
-	while (i <= all_info->input->number_of_philosophers)
-	{
-		if(pthread_create(&all_info->philos[i].thread,NULL,routine,(void *)all_info))
-			return (1);
-		i++;
-	}
-}
-
-void ft_join_threads(t_all_info *all_info)
-{
-	int i = 0;
-	int k;
-
-	k = all_info->input->number_of_philosophers;
-	while (i < k)
-	{
-		pthread_join(all_info->philos[i].thread, NULL);
-		i++;
-	}
-
-}

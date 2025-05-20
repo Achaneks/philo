@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:34:04 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/19 17:07:48 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/20 13:27:08 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_all_info
 	t_input			*input;
 	pthread_mutex_t	*fork;
 	t_philo			*philos;
+	pthread_t monitor_thread;
 } t_all_info;
 
 
