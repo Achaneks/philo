@@ -14,8 +14,9 @@
 
 void *routine(void *arg)
 {
-	t_all_info *all_info;
+	t_philo *philo;
 
-	all_info = (t_all_info *)arg;
+	philo = (t_philo *)arg;
+	printf("id : %d\n",philo->id);
 	return (NULL);
 }

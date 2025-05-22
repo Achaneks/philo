@@ -63,4 +63,9 @@ int		ft_atoi(char *str);
 
 void	*routine(void *arg);
 
+int		fill_philo(t_all_info *all_info);
+int		create_threads(t_all_info *all_info);
+void	ft_join_threads(t_all_info *all_info);
+int		ft_init_forks(t_all_info *all_info);
+
 # endif

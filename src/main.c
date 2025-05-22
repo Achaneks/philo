@@ -12,22 +12,7 @@
 
 #include "../include/philo.h"
 
-void	fill_philo(t_all_info *all_info)
-{
-	int i;
 
-	all_info->philos = malloc(sizeof(all_info->philos)
-			* (all_info->input->number_of_philosophers));
-	i = 0;
-	while (i < all_info->input->number_of_philosophers)
-	{
-		all_info->philos[i].id = i + 1;
-		all_info->philos[i].left_fork = i + 1;
-		all_info->philos[i].rigth_fork = i + 2;
-		all_info->philos[i].number_of_eat = 0;
-		i++;
-	}
-}
 
 int	main(int ac, char **av)
 {
@@ -39,5 +24,8 @@ int	main(int ac, char **av)
 		return ((ft_putstr_fd(ERROR1, 2)), 1);
 	if (ft_check_input(all_info->input, ac, av))
 		return (1);
-	fill_philo(all_info);
+	if(fill_philo(all_info))
+		return 1;
+	if (create_threads(all_info))
+		return 1;
 }

@@ -12,30 +12,55 @@
 
 #include "../../include/philo.h"
 
+int	fill_philo(t_all_info *all_info)
+{
+	int i;
+
+	all_info->philos = malloc(sizeof(t_philo)
+			* (all_info->input->number_of_philosophers));
+	if (!all_info->philos)
+		return (1);
+
+	i = 0;
+	while (i < all_info->input->number_of_philosophers)
+	{
+		all_info->philos[i].id = i + 1;
+		all_info->philos[i].left_fork = i + 1;
+		all_info->philos[i].rigth_fork = i + 2;
+		all_info->philos[i].number_of_eat = 0;
+		all_info->philos[i].thread = 0;
+		i++;
+	}
+	return (0);
+}
+
 
 int create_threads(t_all_info *all_info)
 {
 	int i;
 
 	i = 0;
-	while (i <= all_info->input->number_of_philosophers)
+	while (i < all_info->input->number_of_philosophers)
 	{
-		if(pthread_create(&all_info->philos[i].thread,NULL,routine,(void *)all_info))
+		if(pthread_create(&all_info->philos[i].thread,NULL,routine,(void *)(all_info->philos + i)))
 			return (1);
 		i++;
 	}
+	ft_join_threads(all_info);
+	return (0);
+
 }
 
 void ft_join_threads(t_all_info *all_info)
 {
-	int i = 0;
+	int i;
 	int k;
 
+	i = 0;
 	k = all_info->input->number_of_philosophers;
 	while (i < k)
 	{
 		pthread_join(all_info->philos[i].thread, NULL);
 		i++;
 	}
-
 }
