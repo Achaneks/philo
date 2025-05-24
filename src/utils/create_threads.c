@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_threads.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 16:53:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/20 13:23:04 by achanek          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:31:15 by anas             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,18 @@ int	fill_philo(t_all_info *all_info)
 	while (i < all_info->input->number_of_philosophers)
 	{
 		all_info->philos[i].id = i + 1;
-		all_info->philos[i].left_fork = i + 1;
-		all_info->philos[i].rigth_fork = i + 2;
+		all_info->philos[i].left_fork = i ;
+		all_info->philos[i].right_fork = (i + 1) % all_info->input->number_of_philosophers;
 		all_info->philos[i].number_of_eat = 0;
 		all_info->philos[i].thread = 0;
+		all_info->start_time = ft_get_current_time();
+		all_info->philos[i].info = all_info;
 		i++;
 	}
 	return (0);
 }
+
+
 
 
 int create_threads(t_all_info *all_info)

@@ -14,5 +14,7 @@ int ft_init_forks(t_all_info *all_info)
             return (1);
         i++;
     }
+    pthread_mutex_init(&all_info->meal_mutex, NULL);
+    pthread_mutex_init(&all_info->print_mutex, NULL);
     return (0);
 }

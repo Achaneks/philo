@@ -26,6 +26,8 @@ int	main(int ac, char **av)
 		return (1);
 	if(fill_philo(all_info))
 		return 1;
+	if(ft_init_forks(all_info))
+		return 1;
 	if (create_threads(all_info))
 		return 1;
 }
