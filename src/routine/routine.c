@@ -6,7 +6,7 @@
 /*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:07:00 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/24 16:50:44 by anas             ###   ########.fr       */
+/*   Updated: 2025/05/24 18:11:21 by anas             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,18 @@ void *routine(void *arg)
 	 t_philo *philo = (t_philo *)arg;
      t_all_info *info = philo->info;
 	 
-	   while (1)
-	   {
-			ft_log_action(info, philo->id, "is thinking");
-			
-			pick_forks(philo);
-			update_last_meal(philo);
-			ft_log_action(info, philo->id, "is eating");
-			
-			ft_sleep(info->input->time_to_eat);
-			release_forks(philo);
-			ft_log_action(info, philo->id, "is sleeping");
-			
-			ft_sleep(info->input->time_to_sleep);
+	while (1)
+	{
+		if (info->someone_died)
+			break;
+		ft_log_action(info, philo->id, "is thinking");
+		pick_forks(philo);
+		update_last_meal(philo);
+		ft_log_action(info, philo->id, "is eating");
+		ft_sleep(info->input->time_to_eat);
+		release_forks(philo);
+		ft_log_action(info, philo->id, "is sleeping");
+		ft_sleep(info->input->time_to_sleep);
     }
 
 	return (NULL);

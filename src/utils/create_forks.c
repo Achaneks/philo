@@ -1,6 +1,6 @@
 #include "../../include/philo.h"
 
-int ft_init_forks(t_all_info *all_info)
+int ft_init_all_mutex(t_all_info *all_info)
 {
     int i;
 
@@ -14,7 +14,25 @@ int ft_init_forks(t_all_info *all_info)
             return (1);
         i++;
     }
-    pthread_mutex_init(&all_info->meal_mutex, NULL);
-    pthread_mutex_init(&all_info->print_mutex, NULL);
+    if (pthread_mutex_init(&all_info->meal_mutex, NULL))
+        return (1);
+    if (pthread_mutex_init(&all_info->print_mutex, NULL));
+        return (1);
     return (0);
+}
+
+void ft_cleanup_mutexes(t_all_info *info)
+{
+    int i;
+
+    i = 0;
+     while (i < info->input->number_of_philosophers)
+     {
+         pthread_mutex_destroy(&info->fork[i]);
+        i++;
+     }
+     
+    pthread_mutex_destroy(&info->print_mutex);
+    pthread_mutex_destroy(&info->meal_mutex);
+    free(info->fork);
 }

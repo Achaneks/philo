@@ -6,7 +6,7 @@
 /*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:34:04 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/24 16:11:24 by anas             ###   ########.fr       */
+/*   Updated: 2025/05/24 17:34:21 by anas             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void		*routine(void *arg);
 int			fill_philo(t_all_info *all_info);
 int			create_threads(t_all_info *all_info);
 void		ft_join_threads(t_all_info *all_info);
-int			ft_init_forks(t_all_info *all_info);
+int			ft_init_all_mutex(t_all_info *all_info);
 
 long long	ft_get_current_time(void);
 void		ft_sleep(long long time_in_ms);

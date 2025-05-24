@@ -6,7 +6,7 @@
 /*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 16:53:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/24 14:31:15 by anas             ###   ########.fr       */
+/*   Updated: 2025/05/24 18:04:04 by anas             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	fill_philo(t_all_info *all_info)
 	if (!all_info->philos)
 		return (1);
 
+	all_info->start_time = ft_get_current_time();
+	all_info->monitor_thread = 0;
 	i = 0;
 	while (i < all_info->input->number_of_philosophers)
 	{
@@ -29,14 +31,11 @@ int	fill_philo(t_all_info *all_info)
 		all_info->philos[i].right_fork = (i + 1) % all_info->input->number_of_philosophers;
 		all_info->philos[i].number_of_eat = 0;
 		all_info->philos[i].thread = 0;
-		all_info->start_time = ft_get_current_time();
 		all_info->philos[i].info = all_info;
 		i++;
 	}
 	return (0);
 }
-
-
 
 
 int create_threads(t_all_info *all_info)
@@ -50,6 +49,8 @@ int create_threads(t_all_info *all_info)
 			return (1);
 		i++;
 	}
+	if (pthread_create(&all_info->monitor_thread, NULL, monitor_routine, &all_info))
+		return (1);
 	ft_join_threads(all_info);
 	return (0);
 
@@ -67,4 +68,6 @@ void ft_join_threads(t_all_info *all_info)
 		pthread_join(all_info->philos[i].thread, NULL);
 		i++;
 	}
+	pthread_join(all_info.monitor_thread, NULL);
+	
 }
