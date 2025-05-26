@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_threads.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 16:53:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/24 18:04:04 by anas             ###   ########.fr       */
+/*   Updated: 2025/05/26 16:00:07 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	fill_philo(t_all_info *all_info)
 	if (!all_info->philos)
 		return (1);
 
-	all_info->start_time = ft_get_current_time();
 	all_info->monitor_thread = 0;
 	i = 0;
 	while (i < all_info->input->number_of_philosophers)
@@ -68,6 +67,7 @@ void ft_join_threads(t_all_info *all_info)
 		pthread_join(all_info->philos[i].thread, NULL);
 		i++;
 	}
-	pthread_join(all_info.monitor_thread, NULL);
-	
+	pthread_join(all_info->monitor_thread, NULL);
+
+	ft_cleanup_mutexes(all_info);
 }

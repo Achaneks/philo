@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anas <anas@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:34:04 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/24 17:34:21 by anas             ###   ########.fr       */
+/*   Updated: 2025/05/26 15:34:43 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_all_info
 	pthread_mutex_t		*fork;
 	pthread_mutex_t 	print_mutex;
 	pthread_mutex_t		meal_mutex;
+	pthread_mutex_t		death_mutex;
 	pthread_t			monitor_thread;
 	int					someone_died;
 	long long			start_time;
@@ -73,6 +74,7 @@ void		ft_putstr_fd(char *str,int fd);
 int			ft_atoi(char *str);
 
 void		*routine(void *arg);
+void		*monitor_routine(void *arg);
 
 int			fill_philo(t_all_info *all_info);
 int			create_threads(t_all_info *all_info);
@@ -81,5 +83,11 @@ int			ft_init_all_mutex(t_all_info *all_info);
 
 long long	ft_get_current_time(void);
 void		ft_sleep(long long time_in_ms);
+
+void	pick_forks(t_philo *philo);
+void	release_forks(t_philo *philo);
+void	update_last_meal(t_philo *philo);
+void	ft_log_action(t_all_info *info, int id, char *msg);
+void	ft_cleanup_mutexes(t_all_info *info);
 
 # endif
