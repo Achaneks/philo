@@ -6,48 +6,79 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 13:24:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/26 16:05:12 by achanek          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:37:54 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philo.h"
 
-void	log_death(t_all_info *info, int philo_id)
+int	check_eat_counter(t_all_info *all_info)
 {
-	long long	timestamp;
+	int	i;
+	int	full_philos;
 
-	timestamp = ft_get_current_time() - info->start_time;
-	pthread_mutex_lock(&info->print_mutex);
-	if (!info->someone_died)
+	full_philos = 0;
+	i = 0;
+	while (i < all_info->input->n_of_ph)
 	{
-		printf("%lld %d died\n", timestamp, philo_id);
-		fflush(stdout);
+		pthread_mutex_lock(&all_info->eat_is_ok_mutex);
+		if (all_info->philos[i].eat_counter >= all_info->input->n_of_t_eat)
+			full_philos++;
+		pthread_mutex_unlock(&all_info->eat_is_ok_mutex);
+		i++;
 	}
-	pthread_mutex_unlock(&info->print_mutex);
+	if (full_philos == all_info->input->n_of_ph)
+	{
+		pthread_mutex_lock(&all_info->eat_is_ok_mutex);
+		all_info->n_of_e_is_ok = 1;
+		pthread_mutex_unlock(&all_info->eat_is_ok_mutex);
+		return (1);
+	}
+	return (0);
 }
 
-void	*monitor_routine(void *arg)
+int	check_time_to_die(t_all_info *all_info)
 {
-	t_all_info	*info;
-	long long	time_since_meal;
+	int			i;
+	long long	time_temp;
 
-	info = (t_all_info *)arg;
+	i = -1;
+	while (++i < all_info->input->n_of_ph)
+	{
+		pthread_mutex_lock(&all_info->meal_mutex);
+		time_temp = ft_get_current_time() - all_info->philos[i].last_meal;
+		pthread_mutex_unlock(&all_info->meal_mutex);
+		if (time_temp > all_info->input->t_to_die)
+		{
+			pthread_mutex_lock(&all_info->died_mutex);
+			if (!all_info->someone_died)
+			{
+				all_info->someone_died = 1;
+				pthread_mutex_lock(&all_info->print_mutex);
+				printf("%lld %d %s\n",
+					ft_get_current_time() - all_info->start_time,
+					i + 1, "died");
+				pthread_mutex_unlock(&all_info->print_mutex);
+			}
+			return ((pthread_mutex_unlock(&all_info->died_mutex)), 1);
+		}
+	}
+	return (0);
+}
+
+void	*monitor(void *arg)
+{
+	t_all_info	*all_info;
+
+	all_info = (t_all_info *)arg;
 	while (1)
 	{
-		for (int i = 0; i < info->input->number_of_philosophers; i++)
+		if (all_info->input->n_of_t_eat > 0)
 		{
-			pthread_mutex_lock(&info->meal_mutex);
-			time_since_meal = ft_get_current_time() - info->philos[i].last_meal;
-			pthread_mutex_unlock(&info->meal_mutex);
-			if (time_since_meal > info->input->time_to_die)
-			{
-				log_death(info, i + 1);
-				pthread_mutex_lock(&info->death_mutex);
-				info->someone_died = 1;
-				pthread_mutex_unlock(&info->death_mutex);
+			if (check_eat_counter(all_info))
 				return (NULL);
-			}
 		}
-		usleep(1000);
+		if (check_time_to_die(all_info))
+			return (NULL);
 	}
 }

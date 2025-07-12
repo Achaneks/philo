@@ -6,73 +6,84 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:07:00 by achanek           #+#    #+#             */
-/*   Updated: 2025/05/26 16:02:41 by achanek          ###   ########.fr       */
+/*   Updated: 2025/06/17 21:49:39 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philo.h"
-void	*routine(void *arg)
-{
-	t_philo		*philo;
-	t_all_info	*info;
 
-	philo = (t_philo *)arg;
-	info = philo->info;
-	while (1)
-	{
-		pthread_mutex_lock(&info->death_mutex);
-		if (info->someone_died)
-		{
-			pthread_mutex_unlock(&info->death_mutex);
-			break;
-		}
-		pthread_mutex_unlock(&info->death_mutex);
-		ft_log_action(info, philo->id, "is thinking");
-		pick_forks(philo);
-		update_last_meal(philo);
-		ft_log_action(info, philo->id, "is eating");
-		ft_sleep(info->input->time_to_eat);
-		release_forks(philo);
-		ft_log_action(info, philo->id, "is sleeping");
-		ft_sleep(info->input->time_to_sleep);
-	}
-	return (NULL);
-}
-
-void	ft_log_action(t_all_info *info, int id, char *msg)
-{
-	pthread_mutex_lock(&info->print_mutex);
-	if (!info->someone_died)
-		printf("%lld %d %s\n", ft_get_current_time() - info->start_time, id,msg);
-	pthread_mutex_unlock(&info->print_mutex);
-}
-void	pick_forks(t_philo *philo)
+static	void	pick_forks(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		pthread_mutex_lock(&philo->info->fork[philo->left_fork]);
-		pthread_mutex_lock(&philo->info->fork[philo->right_fork]);
-		ft_log_action(philo->info, philo->id, "has taken a fork");
+		pthread_mutex_lock(&philo->all_info->fork[philo->left_fork]);
+		ft_print_action(philo->all_info, philo->id, "has taken a fork");
+		pthread_mutex_lock(&philo->all_info->fork[philo->right_fork]);
+		ft_print_action(philo->all_info, philo->id, "has taken a fork");
 	}
 	else
 	{
-		usleep(100);
-		pthread_mutex_lock(&philo->info->fork[philo->right_fork]);
-		pthread_mutex_lock(&philo->info->fork[philo->left_fork]);
-		ft_log_action(philo->info, philo->id, "has taken a fork");
+		pthread_mutex_lock(&philo->all_info->fork[philo->right_fork]);
+		ft_print_action(philo->all_info, philo->id, "has taken a fork");
+		pthread_mutex_lock(&philo->all_info->fork[philo->left_fork]);
+		ft_print_action(philo->all_info, philo->id, "has taken a fork");
 	}
 }
 
-void	release_forks(t_philo *philo)
+static	void	release_forks(t_philo *philo)
 {
-	pthread_mutex_unlock(&philo->info->fork[philo->right_fork]);
-	pthread_mutex_unlock(&philo->info->fork[philo->left_fork]);
+	pthread_mutex_unlock(&philo->all_info->fork[philo->left_fork]);
+	pthread_mutex_unlock(&philo->all_info->fork[philo->right_fork]);
 }
 
-void	update_last_meal(t_philo *philo)
+static	void	routine_helper(t_all_info *all_info, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->meal_mutex);
-	philo->last_meal = ft_get_current_time();
-	printf("philo %d is update last mael\n",philo->id);
-	pthread_mutex_unlock(&philo->info->meal_mutex);
+	pick_forks(philo);
+	update_last_meal(philo);
+	ft_print_action(all_info, philo->id, "is eating");
+	ft_sleep(all_info->input->t_to_eat, all_info);
+	release_forks(philo);
+	pthread_mutex_lock(&all_info->eat_is_ok_mutex);
+	philo->eat_counter += 1;
+	pthread_mutex_unlock(&all_info->eat_is_ok_mutex);
+	ft_print_action(all_info, philo->id, "is sleeping");
+	ft_sleep(all_info->input->t_to_sleep, all_info);
+	if (all_info->input->n_of_ph % 2)
+	{
+		if (philo->id % 2)
+		{
+			ft_print_action(all_info, philo->id, "is thinking");
+			ft_sleep((all_info->input->t_to_eat - 10), all_info);
+		}
+	}
+	else
+		ft_print_action(all_info, philo->id, "is thinking");
+}
+
+void	*routine(void *arg)
+{
+	t_philo		*philo;
+
+	philo = (t_philo *)arg;
+	if (philo->id % 2)
+		usleep(1000);
+	while (1)
+	{
+		pthread_mutex_lock(&philo->all_info->died_mutex);
+		if (philo->all_info->someone_died)
+		{
+			pthread_mutex_unlock(&philo->all_info->died_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->all_info->died_mutex);
+		pthread_mutex_lock(&philo->all_info->eat_is_ok_mutex);
+		if (philo->all_info->n_of_e_is_ok)
+		{
+			pthread_mutex_unlock(&philo->all_info->eat_is_ok_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->all_info->eat_is_ok_mutex);
+		routine_helper(philo->all_info, philo);
+	}
+	return (NULL);
 }
