@@ -6,13 +6,13 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:07:00 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/17 21:49:39 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/13 13:21:20 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philo.h"
 
-static	void	pick_forks(t_philo *philo)
+static void	pick_forks(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
@@ -30,13 +30,13 @@ static	void	pick_forks(t_philo *philo)
 	}
 }
 
-static	void	release_forks(t_philo *philo)
+static void	release_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->all_info->fork[philo->left_fork]);
 	pthread_mutex_unlock(&philo->all_info->fork[philo->right_fork]);
 }
 
-static	void	routine_helper(t_all_info *all_info, t_philo *philo)
+static void	routine_helper(t_all_info *all_info, t_philo *philo)
 {
 	pick_forks(philo);
 	update_last_meal(philo);
@@ -53,7 +53,9 @@ static	void	routine_helper(t_all_info *all_info, t_philo *philo)
 		if (philo->id % 2)
 		{
 			ft_print_action(all_info, philo->id, "is thinking");
-			ft_sleep((all_info->input->t_to_eat - 10), all_info);
+			if (all_info->input->t_to_eat - all_info->input->t_to_sleep >= 0)
+				ft_sleep((all_info->input->t_to_eat
+						- all_info->input->t_to_sleep + 20), all_info);
 		}
 	}
 	else
@@ -62,7 +64,7 @@ static	void	routine_helper(t_all_info *all_info, t_philo *philo)
 
 void	*routine(void *arg)
 {
-	t_philo		*philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2)

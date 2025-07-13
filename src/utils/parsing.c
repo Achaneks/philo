@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:33:53 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/17 10:41:32 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/12 15:55:46 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	ft_fill_input(t_input *input, int ac, char **av)
 	{
 		input->n_of_t_eat = ft_atoi(av[5]);
 	}
+	else
+		input->n_of_t_eat = 0;
 	if (ft_check_errors(input, ac))
 		return (1);
 	return (0);

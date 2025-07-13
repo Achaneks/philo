@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 13:24:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/17 22:37:54 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/12 17:25:54 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_time_to_die(t_all_info *all_info)
 		pthread_mutex_lock(&all_info->meal_mutex);
 		time_temp = ft_get_current_time() - all_info->philos[i].last_meal;
 		pthread_mutex_unlock(&all_info->meal_mutex);
-		if (time_temp > all_info->input->t_to_die)
+		if (time_temp >= all_info->input->t_to_die)
 		{
 			pthread_mutex_lock(&all_info->died_mutex);
 			if (!all_info->someone_died)
@@ -80,5 +80,6 @@ void	*monitor(void *arg)
 		}
 		if (check_time_to_die(all_info))
 			return (NULL);
+		usleep(1000);
 	}
 }

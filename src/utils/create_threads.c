@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 16:53:28 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/20 10:23:34 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/12 22:34:03 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	fill_philo(t_all_info *all_info)
 	return (0);
 }
 
-void	ft_join_threads(t_all_info *all_info)
+static	void	ft_join_threads(t_all_info *all_info)
 {
 	int	i;
 	int	k;

@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:24:56 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/17 21:55:57 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/12 18:31:48 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static	int	main_helper(t_all_info *all_info)
 {
 	if (fill_philo(all_info))
-		return (1);
+		return (free(all_info->input), free(all_info), 1);
 	if (ft_init_all_mutex(all_info))
-		return (1);
+		return (free(all_info->input), free(all_info), 1);
 	if (create_threads(all_info))
-		return (1);
+		return (free(all_info->input), free(all_info), 1);
 	return (0);
 }
 
@@ -39,9 +39,9 @@ int	main(int ac, char **av)
 		return (free(all_info->input), free(all_info), 1);
 	if (all_info->input->n_of_ph == 1)
 	{
-		ft_print_action(all_info, 1, "has taken a fork");
+		printf("0 1 has taken a fork\n");
 		usleep(1000 * all_info->input->t_to_die);
-		ft_print_action(all_info, 1, "died");
+		printf("%d 1 died\n", all_info->input->t_to_die);
 		return (free(all_info->input), free(all_info), 0);
 	}
 	if (main_helper(all_info))

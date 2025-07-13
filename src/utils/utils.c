@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:26:23 by achanek           #+#    #+#             */
-/*   Updated: 2025/06/17 21:47:57 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/12 18:21:27 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,17 @@ void	update_last_meal(t_philo *philo)
 
 void	ft_print_action(t_all_info *all_info, int id, char *msg)
 {
-	pthread_mutex_lock(&all_info->print_mutex);
 	pthread_mutex_lock(&all_info->died_mutex);
-	if (!all_info->someone_died)
-		printf("%lld %d %s\n",
-			ft_get_current_time() - all_info->start_time, id, msg);
-	pthread_mutex_unlock(&all_info->died_mutex);
+	if (all_info->someone_died)
+	{
+		pthread_mutex_unlock(&all_info->died_mutex);
+		return ;
+	}
+	pthread_mutex_lock(&all_info->print_mutex);
+	printf("%lld %d %s\n",
+		ft_get_current_time() - all_info->start_time, id, msg);
 	pthread_mutex_unlock(&all_info->print_mutex);
+	pthread_mutex_unlock(&all_info->died_mutex);
 }
 
 void	free_all(t_all_info *all_info)
