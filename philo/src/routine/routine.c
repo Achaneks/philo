@@ -6,7 +6,7 @@
 /*   By: achanek <achanek@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:07:00 by achanek           #+#    #+#             */
-/*   Updated: 2025/07/13 13:21:20 by achanek          ###   ########.fr       */
+/*   Updated: 2025/07/17 10:51:50 by achanek          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,32 @@ static void	release_forks(t_philo *philo)
 	pthread_mutex_unlock(&philo->all_info->fork[philo->right_fork]);
 }
 
+static void	ft_think(t_philo *philo)
+{
+	if (philo->all_info->input->n_of_ph % 2)
+	{
+		ft_print_action(philo->all_info, philo->id, "is thinking");
+		if (philo->id % 2)
+		{
+			if (philo->all_info->input->t_to_eat
+				- philo->all_info->input->t_to_sleep >= 0)
+				ft_sleep((philo->all_info->input->t_to_eat
+						- philo->all_info->input->t_to_sleep + 10),
+					philo->all_info);
+		}
+	}
+	else
+		ft_print_action(philo->all_info, philo->id, "is thinking");
+}
+
 static void	routine_helper(t_all_info *all_info, t_philo *philo)
 {
+	if (philo->all_info->input->n_of_ph == 1)
+	{
+		ft_print_action(philo->all_info, philo->id, "has taken a fork");
+		usleep((philo->all_info->input->t_to_die + 3) * 1000);
+		return ;
+	}
 	pick_forks(philo);
 	update_last_meal(philo);
 	ft_print_action(all_info, philo->id, "is eating");
@@ -48,18 +72,7 @@ static void	routine_helper(t_all_info *all_info, t_philo *philo)
 	pthread_mutex_unlock(&all_info->eat_is_ok_mutex);
 	ft_print_action(all_info, philo->id, "is sleeping");
 	ft_sleep(all_info->input->t_to_sleep, all_info);
-	if (all_info->input->n_of_ph % 2)
-	{
-		if (philo->id % 2)
-		{
-			ft_print_action(all_info, philo->id, "is thinking");
-			if (all_info->input->t_to_eat - all_info->input->t_to_sleep >= 0)
-				ft_sleep((all_info->input->t_to_eat
-						- all_info->input->t_to_sleep + 20), all_info);
-		}
-	}
-	else
-		ft_print_action(all_info, philo->id, "is thinking");
+	ft_think(philo);
 }
 
 void	*routine(void *arg)
